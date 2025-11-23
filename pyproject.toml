@@ -18,6 +18,9 @@ classifiers = [
     "License :: OSI Approved :: Apache 2.0",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "psutil>=5.9.0"
+]
 
 [project.urls]
 "Bug Tracker" = "https://github.com/pypa/python_package_exercise/issues"
