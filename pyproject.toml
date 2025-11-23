@@ -21,6 +21,8 @@ classifiers = [
 dependencies = [
     "psutil>=5.9.0"
 ]
+[tool.flake8]
+max-line-length = 88
 
 [project.urls]
 "Bug Tracker" = "https://github.com/pypa/python_package_exercise/issues"
