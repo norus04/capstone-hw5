@@ -22,6 +22,7 @@ This module sorts lists of integers...
 import os
 import psutil
 
+
 def bubble(int_list):
     """
     bubble docstring
@@ -56,8 +57,8 @@ def insertion(int_list):
     In this implementation we copy the list first so that
     the original data is not mutated (important for testing).
     """
-    
-    arr = int_list.copy() # Copy to avoid mutating caller’s list
+
+    arr = int_list.copy()  # Copy to avoid mutating caller’s list
 
     for i in range(1, len(arr)):
         key = arr[i]
@@ -72,9 +73,11 @@ def insertion(int_list):
 
     return arr
 
+
 def measure_insertion_memory(int_list, runs=1):
     """
-    This function measures memory usage (resident set size change) while running insertion sort.
+    This function measures memory usage (resident set size change)
+    while running insertion sort.
 
     Parameters
     ----------
@@ -95,7 +98,7 @@ def measure_insertion_memory(int_list, runs=1):
     changes = []
     sorted_out = None
 
-    for i in range(runs):
+    for _ in range(runs):
         before = process.memory_info().rss
         sorted_out = insertion(int_list)
         after = process.memory_info().rss
