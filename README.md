@@ -1,5 +1,7 @@
 # DevOps Exercise
 
+[![Python application](https://github.com/norus04/capstone-hw5/actions/workflows/main.yml/badge.svg)](https://github.com/norus04/capstone-hw5/actions/workflows/main.yml)
+
 This is a skeleton repository for your exercise. 
 The goal of this exercise is to implement a Python package for sorting integer 
 lists using the DevOps software development approach.
