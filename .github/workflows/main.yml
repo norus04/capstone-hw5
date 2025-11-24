@@ -41,7 +41,7 @@ jobs:
         run: black --check .
 
       - name: Lint (flake8)
-        run: flake8 .
+        run: flake8 . --max-line-length=88
 
       - name: Build package
         run: python -m build
