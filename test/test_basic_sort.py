@@ -30,10 +30,7 @@ def is_sorted(int_list):
     """
     Testing oracle: True if list is sorted nondecreasing.
     """
-    return all(
-        int_list[i] <= int_list[i + 1]
-        for i in range(len(int_list) - 1)
-    )
+    return all(int_list[i] <= int_list[i + 1] for i in range(len(int_list) - 1))
 
 
 @pytest.fixture
@@ -117,9 +114,7 @@ def test_insertion_does_not_change_input(int_lists):
     for lst in int_lists:
         original = lst.copy()
         _ = insertion(lst)
-        assert lst == original, (
-            "Insertion sort should not change the input list"
-        )
+        assert lst == original, "Insertion sort should not change the input list"
 
 
 def test_insertion_output_is_sorted(int_lists):

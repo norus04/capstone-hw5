@@ -91,7 +91,7 @@ def measure_bubble_cpu(int_list, runs=1):
     rss_changes = []
     sorted_out = None
 
-    for i in range(runs):
+    for _ in range(runs):
         # Record the start time and initial memory
         start_time = time.time()
         before_rss = process.memory_info().rss
