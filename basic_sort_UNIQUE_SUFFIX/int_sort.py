@@ -120,9 +120,82 @@ def measure_bubble_cpu(int_list, runs=1):
 
 def quick(int_list):
     """
-    qsort docstring
+    Sort a list of integers using the Quick Sort algorithm.
+
+    Parameters
+    ----------
+    int_list : list[int]
+        A list of integers to be sorted.
+
+    Returns
+    -------
+    list[int]
+        A new sorted list of integers.
+
+    Notes
+    -----
+    This implementation is recursive and does not mutate the input list.
+    It uses a middle pivot and partitions the list into three groups:
+    values less than the pivot, equal to the pivot, and greater than
+    the pivot.
     """
-    print("quick sort")
+    # Base case: empty or single-element list is already sorted
+    if len(int_list) <= 1:
+        return int_list.copy()
+
+    # Use a pivot (middle element)
+    pivot = int_list[len(int_list) // 2]
+
+    # Partition into three lists
+    left = [x for x in int_list if x < pivot]
+    middle = [x for x in int_list if x == pivot]
+    right = [x for x in int_list if x > pivot]
+
+    # Recursively sort left and right, concatenate
+    return quick(left) + middle + quick(right)
+
+
+def measure_quick_cpu(int_list, runs=1):
+    """
+    Measure CPU time and memory usage while running quick sort.
+
+    Parameters
+    ----------
+    int_list : list[int]
+        Data to sort.
+    runs : int, optional
+        Number of times to run quick sort for averaging.
+
+    Returns
+    -------
+    dict
+        {
+          "sorted": <sorted output from last run>,
+          "avg_cpu_time": <average runtime in seconds>,
+          "avg_rss_bytes": <average change in memory usage in bytes>
+        }
+    """
+    process = psutil.Process(os.getpid())
+    total_times = []
+    rss_changes = []
+    sorted_out = None
+
+    for _ in range(runs):
+        before_rss = process.memory_info().rss
+        start = time.time()
+
+        sorted_out = quick(int_list)
+
+        end = time.time()
+        after_rss = process.memory_info().rss
+
+        total_times.append(end - start)
+        rss_changes.append(after_rss - before_rss)
+
+    avg_time = sum(total_times) / len(total_times)
+    avg_rss = sum(rss_changes) / len(rss_changes)
+
+    return {"sorted": sorted_out, "avg_cpu_time": avg_time, "avg_rss_bytes": avg_rss}
 
 
 def insertion(int_list):
