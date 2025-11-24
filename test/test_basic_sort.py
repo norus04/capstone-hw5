@@ -19,14 +19,21 @@
 import pytest
 import numpy as np
 from basic_sort_UNIQUE_SUFFIX.int_sort import insertion
-from basic_sort_UNIQUE_SUFFIX.int_sort import measure_insertion_memory
+from basic_sort_UNIQUE_SUFFIX.int_sort import (
+    measure_insertion_memory,
+    bubble,
+    measure_bubble_cpu,
+)
 
 
 def is_sorted(int_list):
     """
     Testing oracle: True if list is sorted nondecreasing.
     """
-    return all(int_list[i] <= int_list[i + 1] for i in range(len(int_list) - 1))
+    return all(
+        int_list[i] <= int_list[i + 1]
+        for i in range(len(int_list) - 1)
+    )
 
 
 @pytest.fixture
@@ -46,9 +53,51 @@ def int_lists():
         [5, -1, 5, 2, 0],  # mixed negatives/duplicates
     ]
 
+    # Bubble sort tests
 
-def test_bubble(int_lists):
-    assert True
+
+def test_bubble_sorts_correctly(int_lists):
+    """
+    Test that bubble sort produces correctly sorted output.
+    """
+    for lst in int_lists:
+        out = bubble(lst)
+        assert out == sorted(lst), f"Bubble sort failed on {lst}"
+
+
+def test_bubble_does_not_change_input(int_lists):
+    """
+    Test that bubble sort does not modify the input list.
+    """
+    for lst in int_lists:
+        original = lst.copy()
+        _ = bubble(lst)
+        assert lst == original, "Bubble sort should not change the input list"
+
+
+def test_bubble_output_is_sorted(int_lists):
+    """
+    Test that bubble sort output is sorted.
+    """
+    for lst in int_lists:
+        out = bubble(lst)
+        assert is_sorted(out), f"Bubble output not sorted: {out}"
+
+
+def test_bubble_cpu_measurement():
+    """
+    Test the CPU measurement function for bubble sort.
+    """
+    data = [5, 3, 1]
+    result = measure_bubble_cpu(data, runs=3)
+
+    assert isinstance(result, dict)
+    assert "sorted" in result
+    assert "avg_cpu_time" in result
+    assert "avg_rss_bytes" in result
+    assert result["sorted"] == sorted(data)
+    assert isinstance(result["avg_cpu_time"], float)
+    assert isinstance(result["avg_rss_bytes"], (int, float))
 
 
 def test_quick(int_lists):
@@ -68,7 +117,9 @@ def test_insertion_does_not_change_input(int_lists):
     for lst in int_lists:
         original = lst.copy()
         _ = insertion(lst)
-        assert lst == original, "Insertion sort should not change the input list"
+        assert lst == original, (
+            "Insertion sort should not change the input list"
+        )
 
 
 def test_insertion_output_is_sorted(int_lists):

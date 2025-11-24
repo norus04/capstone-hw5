@@ -21,13 +21,101 @@ This module sorts lists of integers...
 """
 import os
 import psutil
+import time
 
 
 def bubble(int_list):
     """
-    bubble docstring
+    Perform bubble sort on a list of integers.
+
+    Parameters
+    ----------
+    int_list : list[int]
+        A list of integers to be sorted.
+
+    Returns
+    -------
+    list[int]
+        A new sorted list of integers.
+
+    Notes
+    -----
+    Bubble sort is a simple sorting algorithm that repeatedly steps through
+    the list, compares adjacent elements and swaps them if they are in the
+    wrong order.
     """
-    print("bubble sort")
+    # Create a copy to avoid mutating the original list
+    arr = int_list.copy()
+    n = len(arr)
+
+    for i in range(n):
+        # Flag to optimize by breaking early if no swaps occur
+        swapped = False
+
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+
+        # If no swapping occurred, array is already sorted
+        if not swapped:
+            break
+
+    return arr
+
+
+def measure_bubble_cpu(int_list, runs=1):
+    """
+    Measure CPU usage while performing bubble sort.
+
+    Parameters
+    ----------
+    int_list : list[int]
+        Data to sort.
+    runs : int, optional
+        Number of times to run bubble sort for averaging. Default is 1.
+
+    Returns
+    -------
+    dict
+        {
+          "sorted": <sorted list from last run>,
+          "avg_cpu_time": <average total CPU time>,
+          "avg_rss_bytes": <average memory usage change>
+        }
+    """
+    process = psutil.Process(os.getpid())
+
+    # Lists to store measurement results
+    total_times = []
+    rss_changes = []
+    sorted_out = None
+
+    for i in range(runs):
+        # Record the start time and initial memory
+        start_time = time.time()
+        before_rss = process.memory_info().rss
+
+        # Perform the sort
+        sorted_out = bubble(int_list)
+
+        # Record end time and memory
+        end_time = time.time()
+        after_rss = process.memory_info().rss
+
+        # Store results
+        total_times.append(end_time - start_time)
+        rss_changes.append(after_rss - before_rss)
+
+    # Calculate averages
+    avg_total_time = sum(total_times) / len(total_times)
+    avg_rss_change = sum(rss_changes) / len(rss_changes)
+
+    return {
+        "sorted": sorted_out,
+        "avg_cpu_time": avg_total_time,
+        "avg_rss_bytes": avg_rss_change,
+    }
 
 
 def quick(int_list):
