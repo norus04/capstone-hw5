@@ -266,4 +266,10 @@ def measure_insertion_memory(int_list, runs=1):
         changes.append(after - before)
 
     average_change = sum(changes) / len(changes) if changes else 0
-    return {"sorted": sorted_out, "avg_rss_bytes": average_change}
+    after_rss = process.memory_info().rss
+
+    return {
+        "sorted": sorted_out,
+        "avg_rss_bytes": average_change,
+        "after_rss_bytes": after_rss,
+    }

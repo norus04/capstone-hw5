@@ -35,7 +35,7 @@ jobs:
           pip install -e .
 
       - name: Test with pytest
-        run: pytest -q
+        run: pytest -q -s
 
       - name: Check formatting (black)
         run: black --check .

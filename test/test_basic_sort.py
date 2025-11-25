@@ -181,3 +181,45 @@ def test_insertion_memory():
     assert "avg_rss_bytes" in result
     assert result["sorted"] == sorted(data)
     assert isinstance(result["avg_rss_bytes"], (int, float))
+
+
+# Overall test report
+
+
+def test_measurements_report():
+    """
+    Print resource-usage measurements for README table.
+
+    This is NOT a strict performance test (values can vary by OS/runner),
+    so we only assert the functions return the expected structure.
+    """
+    rng = np.random.default_rng(seed=1337)
+    data = list(rng.integers(low=-10, high=200, size=5000))
+
+    bubble_stats = measure_bubble_cpu(data, runs=5)
+    quick_stats = measure_quick_cpu(data, runs=5)
+    insertion_stats = measure_insertion_memory(data, runs=5)
+
+    # structural asserts
+    assert "avg_cpu_time" in bubble_stats
+    assert "avg_rss_bytes" in bubble_stats
+
+    assert "avg_cpu_time" in quick_stats
+    assert "avg_rss_bytes" in quick_stats
+
+    assert "avg_rss_bytes" in insertion_stats
+    assert "after_rss_bytes" in insertion_stats
+
+    # print results for CI logs
+    print(
+        f"[MEASURE] bubble avg_cpu_time={bubble_stats['avg_cpu_time']:.6f}s "
+        f"avg_rss_bytes={bubble_stats['avg_rss_bytes']:.0f}"
+    )
+    print(
+        f"[MEASURE] quick avg_cpu_time={quick_stats['avg_cpu_time']:.6f}s "
+        f"avg_rss_bytes={quick_stats['avg_rss_bytes']:.0f}"
+    )
+    print(
+        f"[MEASURE] insertion avg_rss_bytes={insertion_stats['avg_rss_bytes']:.0f} "
+        f"after_rss_bytes={insertion_stats['after_rss_bytes']:.0f}"
+    )
