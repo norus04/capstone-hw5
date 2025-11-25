@@ -65,8 +65,11 @@ Dataset size: n = 5000 integers, averaged over 5 runs per OS.
 
 ## How to Run
 Install dependencies:
-python -m pip install -r requirements-dev.txt
+make install
 
 Run tests:
-pytest -q -s
+make tests
+
+Local lint check:
+make lint
 
